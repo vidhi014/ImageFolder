@@ -1,0 +1,213 @@
+/* ComedyCard.css */
+
+.play-icon {
+    padding: 10px;
+    border-radius: 50%;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    background: #9000ff !important;
+    color: white !important;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    position: absolute !important;
+    top: 45%;
+    right: 10%;
+    display: none;
+    transition: all 0.4s ease-in-out;
+    box-shadow: 0 0 16px 4px #9000ff50 !important;
+}
+
+/* .play-icon {
+    display: flex;
+} */
+
+.card {
+    position: relative;
+    text-decoration: none;
+    background-color: var(--card-bg);
+    max-width: 280px;
+    height: 280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 16px;
+    border-radius: 6px;
+    box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.1);
+    
+}
+
+.card:hover .play-icon {
+  display: flex;
+}
+
+.card:hover {
+    cursor: pointer;
+    transform: translateY(-8px);
+    transition: all 0.4s ease-in-out;
+    box-shadow: 0 0 18px 0 rgba(0, 0, 0, 0.3);
+    filter: brightness(1.3);
+}
+
+.delete-icon-container {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 10; 
+}
+
+.delete-icon {
+  background: rgba(55, 55, 55, 0.5);
+  border-radius: 50%;
+  padding: 4px;
+  transition: all 0.2s ease;
+}
+
+.delete-icon:hover {
+  background: rgba(0, 0, 0, 0.7);
+  transform: scale(1.1);
+}
+
+.top {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 150px;
+    width: 130px;
+    position: relative;
+}
+
+
+.card-image {
+    border-radius: 6px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+    width: 220px;
+    height: 140px;
+    object-fit: cover;
+}
+
+.card-image:hover {
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+}
+
+
+.card-information {
+    display: flex;
+    align-items: flex-end;
+    font-weight: 450;
+    padding: 14px 0px 0px 0px;
+    width: 100%;
+}
+
+.main-info {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 4px;
+}
+
+.title {
+    overflow: hidden;
+    display: -webkit-box;
+    max-width: 100%;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: white;
+}
+
+.description {
+    overflow: hidden;
+    display: -webkit-box;
+    max-width: 100%;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    color: white;
+    font-size: 12px;
+}
+
+.creaters-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.creator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.creator-name {
+    width: 150px;
+    font-size: 12px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: white;
+}
+
+.views {
+    font-size: 10px;
+    color: white;
+    width: max-content;
+}
+
+.wrapper {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.modal-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    max-width: 800px;
+    background-color:#15171E;
+    border-radius: 8px;
+    box-shadow: 0 0 24px rgba(0, 0, 0, 0.5);
+    padding: 30px;
+    outline: none;
+}
+
+.media-player {
+    width: 70%;
+    aspect-ratio: 16/9;
+}
+
+.media-player iframe {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    border: none;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.modal-title {
+    margin: 0;
+    color: white;
+}
+
+.audio-player {
+    width: 100%;
+}
+
+.close-icon {
+    color: white;
+}
+
