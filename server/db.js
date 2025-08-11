@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 
 dotenv.config();
 
-const DB_URI = 'mongodb+srv://admin:1234@cluster0.2jdhrf5.mongodb.net/ImageFolder'
+const DB_URI = ''
 
 const connectDB = async () => {
   try {
