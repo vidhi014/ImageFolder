@@ -11,6 +11,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { useDispatch, useSelector } from "react-redux";
 import styled from 'styled-components';
 import { closeSignin } from "./redux/slices/setSigninSlice.jsx";
+import FolderView from "../src/components/FolderView.jsx";
 
 const Frame = styled.div`
   display: flex;
@@ -79,6 +80,7 @@ function App() {
               <Route path='/' exact element={<Dashboard setSignInOpen={setSignInOpen}/>} />
               <Route path='/' exact element={<Dashboard setSignInOpen={setSignInOpen}/>} />
               <Route path="/signin" element={<Signin />} />
+              <Route path="/folder/:folderId" element={<FolderView />} />
             </Routes>
           </Frame>
 

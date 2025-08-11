@@ -1,6 +1,6 @@
 import express from "express";
 import multer from "multer";
-import { uploadImage, searchImages } from "../image/imageController.js";
+import { getImages,uploadImage, searchImages } from "../image/imageController.js";
 import auth from "../../middleware/auth.js";
 
 const router = express.Router();
@@ -11,6 +11,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
+router.get("/",auth,getImages);
 router.post("/upload", auth, upload.single("image"), uploadImage);
 router.get("/search", auth, searchImages);
 

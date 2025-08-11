@@ -1,4 +1,3 @@
-// models/user.js
 import mongoose from 'mongoose';
 
 const UserSchema = new mongoose.Schema({
@@ -17,7 +16,7 @@ const UserSchema = new mongoose.Schema({
   },
   otp: { type: String },
   otpExpiry: { type: Date }
-});
+}, { collection: 'users' });
 
 const UserModel = mongoose.model('User', UserSchema);
 export default UserModel; 

@@ -1,126 +1,94 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from "styled-components";
-import axios from 'axios';
-import CreateFolder from "../components/CreateFolder.jsx";
-import ImageUpload from "../components/ImageUpload.jsx";
+import Button from '@mui/material/Button';
 import FolderIcon from '@mui/icons-material/Folder';
 import ImageIcon from '@mui/icons-material/Image';
-import Button from '@mui/material/Button';
+import axios from 'axios';
+import Folder from '@mui/icons-material/Folder';
 import CircularProgress from '@mui/material/CircularProgress';
-import Alert from '@mui/material/Alert';
+import { useNavigate } from 'react-router-dom';
+import { Modal, Box, TextField, Typography } from '@mui/material';
+import { Toast } from 'primereact/toast';
+import { FileUpload } from 'primereact/fileupload';
 
-// Styled Components
-const DashboardMain = styled.div`
-  padding: 20px 30px;
-  padding-bottom: 200px;
-  height: 100%;
-  overflow-x: hidden;
-  overflow-y: scroll;
+
+const DashboardContainer = styled.div`
+  padding: 20px;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  
-  @media (max-width: 768px) {
-    padding: 6px 10px;
-  }
+  background-color: #1C1E27;
 `;
 
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  padding: 0 20px;
 `;
 
 const Title = styled.h1`
-  color: ${({ theme }) => theme.text_primary};
-  font-size: 24px;
-  font-weight: 500;
-  
-  @media (max-width: 768px) {
-    font-size: 18px;
-  }
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0;
+  background: linear-gradient(to right, #3498db, #2ecc71);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 `;
 
-const Actions = styled.div`
+const ActionButtons = styled.div`
   display: flex;
   gap: 15px;
-  
-  @media (max-width: 600px) {
-    flex-direction: column;
-    gap: 10px;
-  }
 `;
 
-const Content = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-`;
-
-const Section = styled.div`
-  background-color: ${({ theme }) => theme.bg};
-  border-radius: 10px;
-  padding: 20px;
-`;
-
-const SectionTitle = styled.h2`
-  color: ${({ theme }) => theme.text_primary};
-  font-size: 20px;
-  margin-bottom: 15px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-`;
-
-const ItemsGrid = styled.div`
+const FolderGrid = styled.div`
+  flex: 1;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 20px;
-  
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 15px;
-  }
-  
-  @media (max-width: 480px) {
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 10px;
-  }
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 25px;
+  padding: 20px;
+  overflow-y: auto;
 `;
 
-const Item = styled.div`
+const FolderItem = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  padding: 15px;
-  border-radius: 8px;
-  background-color: ${({ theme }) => theme.bgLight};
+  padding: 25px 20px;
+  border-radius: 12px;
+  background-color: white;
   cursor: pointer;
-  transition: all 0.3s ease;
-  
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    border-color: #3498db;
   }
 `;
 
-const ItemIcon = styled.div`
-  font-size: 40px;
-  color: ${({ theme }) => theme.primary};
-  
-  @media (max-width: 768px) {
-    font-size: 32px;
-  }
+const FolderIconStyled = styled(Folder)`
+  font-size: 60px !important;
+  color: #3498db;
+  margin-bottom: 15px;
 `;
 
-const ItemName = styled.span`
-  color: ${({ theme }) => theme.text_primary};
-  font-size: 14px;
+const FolderName = styled.span`
+  font-size: 1.1rem;
+  color: #2c3e50;
+  font-weight: 500;
   text-align: center;
   word-break: break-word;
-  width: 100%;
+`;
+
+const FolderDate = styled.span`
+  font-size: 0.8rem;
+  color: #7f8c8d;
+  margin-top: 8px;
 `;
 
 const LoadingContainer = styled.div`
@@ -131,70 +99,70 @@ const LoadingContainer = styled.div`
 `;
 
 const EmptyState = styled.div`
-  text-align: center;
-  padding: 40px;
-  color: ${({ theme }) => theme.text_secondary};
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #7f8c8d;
+  font-size: 1.2rem;
 `;
 
+const modalStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  backgroundColor: '#fff',
+  padding: '30px',
+  borderRadius: '10px',
+  width: 400,
+  boxShadow: 24
+};
+
 const Dashboard = () => {
-   const [folders, setFolders] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [showCreateFolder, setShowCreateFolder] = useState(false);
   const [showImageUpload, setShowImageUpload] = useState(false);
+  const [folders, setFolders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [folderName, setFolderName] = useState('');
+  const navigate = useNavigate();
+  const toast = useRef(null);
 
-  // Fetch ALL folders from API (including those without parents)
   useEffect(() => {
-    const fetchAllFolders = async () => {
+    const fetchFolders = async () => {
       try {
-        setLoading(true);
         const token = localStorage.getItem('token');
         const response = await axios.get('http://localhost:4000/api/folders', {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
-        
-        console.log('All Folders API Response:', response.data);
-        
-        // Handle different possible response structures
-        if (response.data && Array.isArray(response.data.folders)) {
-          setFolders(response.data.folders);
-        } else if (response.data && Array.isArray(response.data)) {
-          setFolders(response.data);
-        } else if (response.data?.result) {
-          // If the response has a result object (like your example)
-          setFolders([response.data.result]); // Wrap in array if single folder
-        } else {
-          console.error('Unexpected API response format:', response.data);
-          setError('No folders data received from server');
-        }
+        setFolders(response.data.folders || response.data);
+        setLoading(false);
       } catch (err) {
-        console.error('Error fetching all folders:', err);
-        setError(err.response?.data?.message || 'Failed to fetch folders');
-      } finally {
+        console.error('Error fetching folders:', err);
         setLoading(false);
       }
     };
 
-    fetchAllFolders();
+    fetchFolders();
   }, []);
 
-  const handleCreateFolder = async (folderName) => {
+  const handleCreateFolder = async () => {
+    if (!folderName.trim()) return;
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post('http://localhost:4000/api/folders', {
-        folderName: folderName,
+        folderName,
         parentId: null 
       }, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
-      
-      // Handle different response structures
-      const newFolder = response.data.folder || response.data.result || response.data;
-      setFolders(prev => [...prev, newFolder]);
+      setFolders([...folders, response.data]);
+      setFolderName('');
       setShowCreateFolder(false);
     } catch (err) {
       console.error('Error creating folder:', err);
@@ -202,39 +170,23 @@ const Dashboard = () => {
     }
   };
 
-  const handleImageUpload = async (imageData) => {
-    try {
-      const token = localStorage.getItem('token');
-      const formData = new FormData();
-      formData.append('image', imageData.file);
-      formData.append('folderId', imageData.folderId);
-      formData.append('name', imageData.name);
-
-      await axios.post('http://localhost:4000/api/images', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${token}`
-        }
-      });
-      
-      setShowImageUpload(false);
-      alert('Image uploaded successfully!');
-    } catch (err) {
-      console.error('Error uploading image:', err);
-      alert(err.response?.data?.message || 'Failed to upload image');
-    }
-  };
+  // Removed unused handleFolderClick function
 
   return (
-        <DashboardMain>
+    <DashboardContainer>
+      <Toast ref={toast} />
       <Header>
-        <Title>My Dashboard</Title>
-        <Actions>
+        <Title>Welcome to ImageAdd</Title>
+        <ActionButtons>
           <Button 
             variant="contained" 
             onClick={() => setShowCreateFolder(true)}
             startIcon={<FolderIcon />}
             size="medium"
+            sx={{
+              backgroundColor: '#3498db',
+              '&:hover': { backgroundColor: '#2980b9' }
+            }}
           >
             Create Folder
           </Button>
@@ -243,55 +195,86 @@ const Dashboard = () => {
             onClick={() => setShowImageUpload(true)}
             startIcon={<ImageIcon />}
             size="medium"
+            sx={{
+              backgroundColor: '#2ecc71',
+              '&:hover': { backgroundColor: '#27ae60' }
+            }}
           >
             Upload Image
           </Button>
-        </Actions>
+        </ActionButtons>
       </Header>
-      
-      <CreateFolder 
-        open={showCreateFolder} 
-        onClose={() => setShowCreateFolder(false)} 
-        onCreate={handleCreateFolder}
-      />
-      
-      <ImageUpload 
-        open={showImageUpload} 
-        onClose={() => setShowImageUpload(false)} 
-        onUpload={handleImageUpload}
-        folders={folders}
-      />
-      
-      <Content>
-        <Section>
-          <SectionTitle>
-            <FolderIcon /> All Folders
-          </SectionTitle>
-          
-          {loading ? (
-            <LoadingContainer>
-              <CircularProgress />
-            </LoadingContainer>
-          ) : error ? (
-            <Alert severity="error">{error}</Alert>
-          ) : folders.length > 0 ? (
-            <ItemsGrid>
-              {folders.map(folder => (
-                <Item key={folder._id} onClick={() => {}}>
-                  <ItemIcon>
-                    <FolderIcon fontSize="inherit" />
-                  </ItemIcon>
-                  <ItemName>{folder.name}</ItemName>
-                  {!folder.parentId && <span>(Root Folder)</span>}
-                </Item>
-              ))}
-            </ItemsGrid>
-          ) : (
-            <EmptyState>No folders found. Create your first folder!</EmptyState>
-          )}
-        </Section>
-      </Content>
-    </DashboardMain>
+
+      {loading ? (
+        <LoadingContainer>
+          <CircularProgress />
+        </LoadingContainer>
+      ) : folders.length > 0 ? (
+        <FolderGrid>
+          {folders.map((folder) => (
+            <FolderItem 
+              key={folder._id}
+              onClick={() => navigate(`/folder/${folder._id}`)}
+            >
+              <FolderIconStyled />
+              <FolderName>{folder.folderName}</FolderName>
+            </FolderItem>
+          ))}
+        </FolderGrid>
+      ) : (
+        <EmptyState>
+          <Typography>No folders found. Create your first folder!</Typography>
+        </EmptyState>
+      )}
+
+      {/* Create Folder Modal */}
+      <Modal
+        open={showCreateFolder}
+        onClose={() => setShowCreateFolder(false)}
+        sx={{ backgroundColor: 'rgba(0,0,0,0.8)' }}
+      >
+        <Box sx={modalStyle}>
+          <Typography variant="h6" gutterBottom>Create Folder</Typography>
+          <TextField
+            fullWidth
+            label="Folder Name"
+            value={folderName}
+            onChange={(e) => setFolderName(e.target.value)}
+            margin="normal"
+          />
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+            <Button onClick={() => setShowCreateFolder(false)}>Cancel</Button>
+            <Button variant="contained" onClick={handleCreateFolder} sx={{ ml: 1 }}>
+              Create
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
+
+      {/* Image Upload Modal */}
+      <Modal
+        open={showImageUpload}
+        onClose={() => setShowImageUpload(false)}
+        sx={{ backgroundColor: 'rgba(0,0,0,0.8)' }}
+      >
+        <Box sx={modalStyle}>
+          <Typography variant="h6" gutterBottom>Upload Image</Typography>
+          <FileUpload
+            mode="basic"
+            name="demo[]"
+            url="/api/upload"
+            accept="image/*"
+            maxFileSize={1000000}
+            auto
+            chooseLabel="Select Image"
+            onUpload={() => {
+              toast.current.show({ severity: 'success', summary: 'Uploaded', detail: 'Image uploaded successfully!' });
+              setShowImageUpload(false);
+            }}
+          />
+        </Box>
+      </Modal>
+    </DashboardContainer>
   );
 };
 

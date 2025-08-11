@@ -7,7 +7,7 @@ const ImageUpload = () => {
   const [folderId, setFolderId] = useState('');
   const [folders, setFolders] = useState([]);
 
-  // Fetch all folders on component mount
+  
   useEffect(() => {
   const fetchFolders = async () => {
     try {
@@ -23,7 +23,7 @@ const ImageUpload = () => {
         }
       });
 
-      console.log("Folders response:", res.data); // ✅ Add this
+      console.log("Folders response:", res.data);
       setFolders(res.data);
     } catch (err) {
       console.error("Error fetching folders", err.response?.data || err.message);
@@ -61,19 +61,8 @@ const ImageUpload = () => {
     <div>
       <h2>Upload Image</h2>
       <form onSubmit={handleUpload}>
-        <input
-          type="text"
-          placeholder="Image name"
-          value={imageName}
-          onChange={(e) => setImageName(e.target.value)}
-          required
-        />
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => setImageFile(e.target.files[0])}
-          required
-        />
+        <input type="text" placeholder="Image name" value={imageName} onChange={(e) => setImageName(e.target.value)} required />
+        <input type="file" accept="image/*" onChange={(e) => setImageFile(e.target.files[0])} required />
         <select value={folderId} onChange={(e) => setFolderId(e.target.value)} required>
           <option value="">Select a folder</option>
           {folders.map((folder) => (

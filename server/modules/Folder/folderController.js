@@ -45,3 +45,22 @@ export const getUserFolders = async (req, res) => {
   const folders = await Folder.find({ user: req.user._id });
   res.json(folders);
 };
+
+
+export const getFolder = async (req, res) => {
+  try {
+    const folder = await Folder.findOne({
+      _id: req.params.id,
+      user: req.user._id
+    });
+
+    if (!folder) {
+      return res.status(404).json({ error: 'Folder not found' });
+    }
+
+    res.json(folder);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+};

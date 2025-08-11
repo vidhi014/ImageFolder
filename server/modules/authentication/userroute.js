@@ -1,4 +1,4 @@
-// routes/userRoutes.js
+
 import express from 'express';
 import { signIn,
   signUp, resetPassword, findUserByEmail, sendOtp, verifyOtp } from './usercontroller.js';

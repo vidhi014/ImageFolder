@@ -1,0 +1,179 @@
+/* Signin.css */
+
+/* Container Styles */
+.signin-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #000000a7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Wrapper Styles */
+.signin-wrapper {
+  width: 380px;
+  border-radius: 16px;
+  background-color: var(--card);
+  color: var(--text_primary);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Title Styles */
+.signin-title {
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--text_primary);
+  margin: 16px 28px;
+}
+
+/* Outlined Box Styles */
+.signin-outlined-box {
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid var(--text_secondary);
+  color: var(--text_secondary);
+  margin: 3px 20px;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 500;
+  padding: 0px 14px;
+}
+
+.signin-outlined-box.google-button {
+  user-select: none;
+  gap: 16px;
+}
+
+.signin-outlined-box.button {
+  user-select: none;
+  border: none;
+  background: var(--button);
+  color: var(--bg);
+}
+
+.signin-outlined-box.active-button {
+  user-select: none;
+  border: none;
+  background: var(--primary);
+  color: white;
+}
+
+/* Divider Styles */
+.signin-divider {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--text_secondary);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.signin-line {
+  width: 80px;
+  height: 1px;
+  border-radius: 10px;
+  margin: 0px 10px;
+  background-color: var(--text_secondary);
+}
+
+/* Input Styles */
+.signin-text-input {
+  width: 100%;
+  border: none;
+  font-size: 14px;
+  border-radius: 3px;
+  background-color: transparent;
+  outline: none;
+  color: var(--text_secondary);
+}
+
+/* Login Text Styles */
+.signin-login-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text_secondary);
+  margin: 20px 20px 30px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.signin-span {
+  color: var(--primary);
+}
+
+/* Error Styles */
+.signin-error {
+  color: red;
+  font-size: 10px;
+  margin: 2px 26px 8px 26px;
+  display: block;
+}
+
+.signin-error.hidden {
+  display: none;
+}
+
+/* Forget Password Styles */
+.signin-forget-password {
+  color: var(--text_secondary);
+  font-size: 13px;
+  margin: 8px 26px;
+  display: block;
+  cursor: pointer;
+  text-align: right;
+}
+
+.signin-forget-password:hover {
+  color: var(--primary);
+}
+
+/* Close Icon Styles */
+.signin-close-icon {
+  position: absolute;
+  top: 24px;
+  right: 30px;
+  cursor: pointer;
+}
+
+/* Password Visibility Toggle Styles */
+.signin-visibility-toggle {
+  font-size: 20px;
+}
+
+/* Loading Styles */
+.signin-loading {
+  padding: 12px 26px;
+  margin-bottom: 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  justify-content: center;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 480px) {
+  .signin-wrapper {
+    width: 90%;
+    max-width: 380px;
+  }
+  
+  .signin-outlined-box {
+    margin: 3px 10px;
+  }
+  
+  .signin-title {
+    margin: 16px 20px;
+  }
+}

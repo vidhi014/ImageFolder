@@ -157,11 +157,9 @@ const SignIn = ({ setSignUpOpen, setSignInOpen }) => {
   const navigate = useNavigate();
 
 
-  // Verify OTP
   const [showOTP, setShowOTP] = useState(false);
   const [otpVerified, setOtpVerified] = useState(false);
   
-  // Reset password
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [samepassword, setSamepassword] = useState("");
   const [newpassword, setNewpassword] = useState("");
@@ -410,15 +408,8 @@ const handleLogin = async (e) => {
                   :
                   <>
                     <OutlinedBox style={{ marginTop: "24px" }}>
-                      <EmailRounded
-                        sx={{ fontSize: "20px" }}
-                        style={{ paddingRight: "12px" }}
-                      />
-                      <TextInput
-                        placeholder="Email Id"
-                        type="email"
-                        onChange={(e) => setEmail(e.target.value)}
-                      />
+                      <EmailRounded sx={{ fontSize: "20px" }} style={{ paddingRight: "12px" }} />
+                      <TextInput placeholder="Email Id" type="email" onChange={(e) => setEmail(e.target.value)} />
                     </OutlinedBox>
                     <Error error={emailError}>{emailError}</Error>
                     <OutlinedBox>
