@@ -20,3 +20,9 @@ const connectDB = async () => {
 };
 
 export default connectDB;
+<<<<<<< HEAD
+=======
+//mongodb+srv://admin:<db_password>@cluster0.2jdhrf5.mongodb.net/
+//admin
+//1234
+>>>>>>> 5a86f8b54756d05c32c16f8a812d6c3a81c33e82
