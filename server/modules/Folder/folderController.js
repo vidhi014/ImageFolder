@@ -1,4 +1,5 @@
 import Folder from "./folderModal.js"
+import Image from "../image/imageModal.js";
 
 export const createFolder = async (req, res) => {
   try {
@@ -42,7 +43,7 @@ export const createFolder = async (req, res) => {
 };
 
 export const getUserFolders = async (req, res) => {
-  const folders = await Folder.find({ user: req.user._id });
+  const folders = await Folder.find({ user: req.user._id, parent: null  });
   res.json(folders);
 };
 
@@ -58,7 +59,24 @@ export const getFolder = async (req, res) => {
       return res.status(404).json({ error: 'Folder not found' });
     }
 
-    res.json(folder);
+   
+    const childFolders = await Folder.find({
+      parent: req.params.id,
+      user: req.user._id
+    });
+
+    
+    const images = await Image.find({
+      folder: req.params.id,
+      user: req.user._id
+    });
+
+    res.json({
+      folder,
+      childFolders,
+      images
+    });
+
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Server error' });
